@@ -6,72 +6,41 @@
 <article class="blog-post">
 
     <div class="col-auto d-none d-lg-block">
+        <div class="col-auto d-none d-lg-block">
+            <img src={{ post.image.url }} class="img-fluid" alt="">
+        </div>
         <!-- <svg class="bd-placeholder-img" width="100%" height="450" xmlns="http://www.w3.org/2000/svg" role="img"
             aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
             <title>Placeholder</title>
             <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
                 dy=".3em">Thumbnail</text>
         </svg> -->
-        <img src={% static "" %} class="img-fluid" alt="">
     </div>
 
-    <strong class="d-inline-block mb-2 mt-3 text-primary">Categoría</strong>
-    <h2 class="display-5 link-body-emphasis mb-1">Titulo del post</h2>
-    <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
+    <strong class="d-inline-block mb-2 mt-3 text-primary"><a href={% url 'category' post.category.id %}>{{ post.category }}</a></strong>
+    <h2 class="display-5 link-body-emphasis mb-1">{{ post.title }}</h2>
+    <p class="blog-post-meta">{{ post.created|date:"d M Y" }} por <a href={% url "author" post.author.id %}>{{ post.author }}</a></p>
 
-    <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly
-        and efficiently about what’s most interesting in this post’s contents.</p>
+    <p class="lead my-3">{{ post.excerpt }}</p>
 
     <hr>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Placeat unde, molestias earum in
-        accusamus harum, quibusdam provident excepturi praesentium et fugit vitae cupiditate.
-        Aspernatur aut fugit impedit officia rem dicta doloribus voluptatibus! Praesentium ut illum
-        aspernatur doloremque est placeat reiciendis, sit unde repudiandae! Maxime nesciunt ratione
-        alias sapiente facere, nam soluta tempore dolores repellat fugiat? Inventore, libero
-        veritatis? </p>
-    <p>Pariatur exercitationem porro iure doloremque consequatur minus architecto iusto
-        hic delectus quos veniam natus laudantium cupiditate maxime nam dolor alias ullam explicabo
-        assumenda officiis voluptates, at rerum! Doloremque tempora voluptatem dolor, quia odio
-        veritatis eos dolorum magnam suscipit quibusdam laudantium saepe quam autem consequuntur,
-        tempore dignissimos? Quasi odio officiis commodi ducimus sint ut aspernatur similique
-        incidunt doloribus molestias sequi, animi odit officia. Repellendus, commodi nobis facilis,
-        repudiandae illum accusamus aspernatur dolore blanditiis quod dolorem harum architecto cum
-        voluptatum cumque odit. Dicta, ut fuga doloremque est eaque quidem ab vitae voluptatibus? In
-        itaque saepe odio animi voluptas error eaque numquam, facilis voluptatem, ex accusantium ut
-        provident aut. Dolores exercitationem, natus modi quaerat iusto consequuntur ea molestias
-        ducimus in, reprehenderit voluptatibus eligendi distinctio commodi earum, atque neque.</p>
-    <p>Deleniti quae excepturi, eius quisquam repudiandae asperiores hic porro quis sapiente libero
-        sed ipsa. Maxime amet quidem explicabo, aut quis nihil necessitatibus officiis rerum? Nobis
-        numquam quam amet fugit ipsum, temporibus, quia atque laudantium id ducimus deleniti natus?
-        Praesentium neque similique dolorum quas voluptatibus! Rerum explicabo, autem nesciunt nemo
-        consectetur veniam repellat officiis amet assumenda sint nostrum at fugiat possimus neque
-        tempore voluptate consequuntur aliquid sunt officia iure mollitia praesentium ad accusantium
-        ut! Sed aspernatur dignissimos laborum quibusdam ex sequi, quo animi esse laboriosam
-        molestiae aliquam, voluptates inventore recusandae perferendis delectus velit?</p>
-    <p>Iure dolores, quasi sit molestiae voluptatibus error ullam soluta. Voluptate veritatis
-        perspiciatis
-        officiis magni minima. Delectus perspiciatis, voluptatum deserunt amet voluptatem recusandae
-        sapiente labore distinctio magni dignissimos earum. Ab deleniti earum repudiandae unde
-        eveniet obcaecati maiores est tempore labore eos soluta itaque aliquam commodi aliquid
-        exercitationem natus corporis ipsa, corrupti odio tempora! Tempora non, tempore at
-        repudiandae qui sequi error, delectus accusantium nam voluptate ullam, cum a nulla. Quidem,
-        laudantium! Obcaecati vero ipsa sed hic provident labore tempore, quo distinctio
-        necessitatibus!</p>
-    <p>Exercitationem inventore magni minima earum? Quos mollitia voluptate soluta
-        ad tempore cumque eaque culpa enim rem cupiditate, atque corporis dignissimos temporibus
-        nemo eos accusantium consequuntur, deleniti, dicta harum? Quidem neque, libero modi amet
-        quibusdam optio accusantium tempora eum molestiae ad sapiente dolorum facere ipsa, magni
-        aut. Rem quam numquam, illo animi nostrum delectus facere perferendis tenetur ad voluptas
-        aut quod a velit voluptates porro, beatae consectetur neque deleniti nisi vel repellendus
-        placeat. Quia vitae eius, qui repudiandae in eum magnam mollitia minima natus fugit, tempora
-        nam necessitatibus at rem ea illum voluptatem maxime unde. Tempora, quis, beatae iusto odit
-        dolor aliquid atque, commodi sit soluta reprehenderit minus quas rerum dolorum cupiditate
-        perspiciatis placeat dicta! Inventore, commodi corrupti impedit aut possimus dolorem rerum
-        libero harum quo dolore cum ducimus consequatur neque quia ullam, ipsum qui rem placeat
-        doloribus id dicta quisquam eius temporibus laboriosam. Illo?</p>
+    <p>{{ post.content|safe}}</p>
+    <hr>
+
+    <strong>Etiquetas:</strong>
+    {% for tag in post.tags.all %}
+        <span class="badge text-bg-info">{{ tag.name }}</span>
+    {% endfor %}
+
 </article>
 
+<hr>
 
-<a class="btn btn-success rounded-pill" href={% url "home" %}>Volver al inicio.</a>
+{% if request.path != '/' %}
+<div class="my-3">
+    <a class="btn btn-success rounded-pill" href={% url "home" %}>Volver al inicio</a>
+</div>
+
+{% endif %}
 
 {% endblock %}

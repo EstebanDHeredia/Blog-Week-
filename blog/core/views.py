@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from .models import Post
+from django.shortcuts import render, get_object_or_404
+from .models import Post, Category
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -16,14 +17,31 @@ def home(request):
     return render(request, 'core/home.html', {'posts': posts,
                                               'aux': aux})
 
-def post(request):
-    return render(request, "core/detail.html")
+def post(request, post_id):
+    # post = Post.objects.get(id=post_id)
+    try:
+        post = get_object_or_404(Post, id=post_id)
+        return render(request, "core/detail.html", {"post": post})
+    except:
+        return render(request, "core/404.html")
 
-def category(request):
-    return render(request, "core/home.html")
+# FILTRADO POR CATEGORIA
+def category(request, category_id):
+    try:
+        category = get_object_or_404(Category, id=category_id)
+        
+        # posts = Post.objects.filter(category=category)
+        
+        return render(request, "core/category.html", {"category": category})
+    except:
+        return render (request, "core/404.html")
 
-def author(request):
-    return render(request, "core/home.html")
+def author(request, author_id):
+    try:
+        author = get_object_or_404(User, id = author_id)
+        return render(request, "core/author.html", {"author": author})
+    except:
+        return render(request, "core/404.html")
 
 def dates(request):
     return render(request, "core/home.html")

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -45,7 +46,8 @@ class Tag (models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=250, verbose_name="Título")
     excerpt = models.TextField(verbose_name="Bajada")
-    content = models.TextField(verbose_name="Contenido")
+    # content = models.TextField(verbose_name="Contenido")
+    content = RichTextField(verbose_name="Contenido")
     image = models.ImageField(
         upload_to="posts", verbose_name="Imagen", null=True, blank=True)
     published = models.BooleanField(default=False, verbose_name="Publicado")
@@ -55,9 +57,9 @@ class Post(models.Model):
         auto_now=True, verbose_name="Fecha de modificación")
     # Campos con relaciones con otros modelos
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, verbose_name="Categoría")
+        Category, on_delete=models.CASCADE, verbose_name="Categoría", related_name="get_posts")
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Autor")
+        User, on_delete=models.CASCADE, verbose_name="Autor", related_name="get_posts")
     tags = models.ManyToManyField(Tag, verbose_name="Etiquetas")
 
     class Meta:
