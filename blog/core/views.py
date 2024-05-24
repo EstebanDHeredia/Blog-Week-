@@ -8,7 +8,16 @@ import datetime
 
 def home(request):
     # posts = Post.objects.filter(published = True)
-    posts_page = Paginator(Post.objects.filter(published = True),2) # 2 es el nro de posts que quiero que entren en cada pagina
+    if not request.session.get('items_per_page'): # Cuando el usuario abre la pagina por 1era vez y no hay seleccionado nada en el combo, por defecto pongo la paginacion en 2
+        request.session['items_per_page'] = 2
+    
+    if request.method == 'GET' and 'items_per_page' in request.GET: # Si el metodo del formulario es GET y existe la variable items_per_page en el GET del request, la almaceno en la variable items_per_page de la sesion del usuario
+        request.session['items_per_page'] = int(request.GET['items_per_page'])
+    
+    items_per_page = request.session['items_per_page']
+
+    # posts_page = Paginator(Post.objects.filter(published = True), 2) # 2 es el nro de posts que quiero que entren en cada pagina
+    posts_page = Paginator(Post.objects.filter(published = True), items_per_page) # 2 es el nro de posts que quiero que entren en cada pagina
     page = request.GET.get('page') # me devuelve el nro actual de pagina en la que estoy
     posts = posts_page.get_page(page) # pido que me devuelva los posts que están en la pagina actual
 
