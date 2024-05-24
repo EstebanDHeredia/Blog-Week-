@@ -6,5 +6,5 @@ urlpatterns = [
     path("post/<int:post_id>", post, name="post"),
     path("category/<int:category_id>", category, name="category"),
     path("author/<int:author_id>", author, name="author"),
-    path("dates/", dates, name="dates"),
+    path("dates/<int:month>/<int:year>", dates, name="dates"),
 ]

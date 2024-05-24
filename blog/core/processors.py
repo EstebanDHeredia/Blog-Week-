@@ -1,4 +1,4 @@
-from .models import About, Link, Category
+from .models import About, Link, Category, Post
 
 # ABOUT
 def ctx_dic_about(request):
@@ -37,6 +37,8 @@ def ctx_dic_link2(request):
 
     return ctx_link2
 
-
-
 # ARCHIVOS
+def ctx_dic_history(request):
+    ctx_history = {}
+    ctx_history['dates'] = Post.objects.dates("created","month", order="DESC").distinct()
+    return ctx_history

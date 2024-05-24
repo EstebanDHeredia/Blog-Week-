@@ -70,6 +70,7 @@ TEMPLATES = [
                 "core.processors.ctx_dic_link2",
                 "core.processors.ctx_dic_about",
                 "core.processors.ctx_dic_category",
+                "core.processors.ctx_dic_history",
             ],
         },
     },

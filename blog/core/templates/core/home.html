@@ -4,24 +4,6 @@
 
 {% block content %}
 
-{% if request.path == '/author/' %}
-<div class="alert alert-success" role="alert">
-    Todos los posts del autor: <strong>AUTOR</strong>
-</div>
-{% endif %}
-
-{% if request.path == '/category/' %}
-<div class="alert alert-success" role="alert">
-    Todos los posts con la categoría: <strong>CATEGORÍA</strong>
-</div>
-{% endif %}
-
-{% if request.path == '/dates/' %}
-<div class="alert alert-success" role="alert">
-    Todos los posts publicados en: <strong>MES Y AÑO</strong>
-</div>
-{% endif %}
-
 <!-- <div class="row mb-2"> -->
     {% for post in posts %}
         {% if forloop.first and posts.number == 1 %}

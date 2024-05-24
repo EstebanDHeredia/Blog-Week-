@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post, Category, Author
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+import datetime
 
 # Create your views here.
 
@@ -14,8 +15,7 @@ def home(request):
     aux = "x" * posts.paginator.num_pages # me va a generar una variable con tantas x como nros de pagina haya,
                                             # esto me va a servir en el template para generar los nros de pagina en el paginador
     
-    return render(request, 'core/home.html', {'posts': posts,
-                                              'aux': aux})
+    return render(request, 'core/home.html', {'posts': posts, 'aux': aux})
 
 def post(request, post_id):
     # post = Post.objects.get(id=post_id)
@@ -43,5 +43,11 @@ def author(request, author_id):
     except:
         return render(request, "core/404.html")
 
-def dates(request):
-    return render(request, "core/home.html")
+def dates(request, month, year):
+    try:
+        posts = Post.objects.filter(published = True, created__month = month, created__year =year)
+        date = datetime.date(year, month, 1)
+        return render(request, "core/dates.html", {'posts': posts,
+                                                   'date': date})
+    except:
+        return render(request, "core/404.html")
