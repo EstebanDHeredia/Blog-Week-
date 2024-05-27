@@ -3,6 +3,8 @@ from .models import Post, Category, Author
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 
@@ -30,7 +32,25 @@ def post(request, post_id):
     # post = Post.objects.get(id=post_id)
     try:
         post = get_object_or_404(Post, id=post_id)
-        return render(request, "core/detail.html", {"post": post})
+        likes, dislikes = post.total_likes()
+        liked = False      
+        disliked = False
+
+        if post.likes.filter(id=request.user.id).exists(): # Averiguo si el usuario logueado le dio like
+            liked = True
+        if post.dislikes.filter(id=request.user.id).exists(): # Averiguo si el usuario logueado le dio a "no me gusta"
+            disliked = True
+            
+        print("-----------------------------------------------------")
+        print(f"Me gusta: {liked}")
+        print(f"NO Me gusta: {disliked}")
+        print("-----------------------------------------------------")
+
+        return render(request, "core/detail.html", {"post": post,
+                                                    "total_likes": likes,
+                                                    "total_dislikes": dislikes,
+                                                    "liked": liked,
+                                                    "disliked": disliked})
     except:
         return render(request, "core/404.html")
 
@@ -60,3 +80,29 @@ def dates(request, month, year):
                                                    'date': date})
     except:
         return render(request, "core/404.html")
+
+def likeView(request, pk):
+    try:
+        post = get_object_or_404(Post, id=pk) # Busco el post con el pk de acuerdo a lo que recibo del formulario
+        
+        if post.dislikes.filter(id=request.user.id).exists() : # Pregunto si el usuario logueado le dio dislike al post
+            post.dislikes.remove(request.user.id) # Si es así lo elimino, porque le dio al botón "me gusta"
+ 
+        post.likes.add(request.user.id) # Con el metodo add agrego al usuario logueado a la lista de many to many del campo likes del post
+
+        return HttpResponseRedirect(reverse('post', args=[post.id])) # Vuelvo a la pagina del detalle del post con utlizando reverse para obtner la url del mismo y agregando el paramentro del id del post
+    except:
+        return HttpResponseRedirect(reverse('post', args=[post.id]))
+
+def disLikeView(request, pk):
+    try:
+        post = get_object_or_404(Post, id=pk) # Busco el post con el pk de acuerdo a lo que recibo del formulario
+        
+        if post.likes.filter(id=request.user.id).exists() : # Pregunto si el usuario logueado ya le dio like al post
+            post.likes.remove(request.user.id) # Si es así lo elimino, porque le dio al botón "no me gusta"
+        
+        post.dislikes.add(request.user.id) # Con el metodo add agrego al usuario logueado a la lista de many to many del campo dislikes del post
+
+        return HttpResponseRedirect(reverse('post', args=[post.id])) # Vuelvo a la pagina del detalle del post con utlizando reverse para obtner la url del mismo y agregando el paramentro del id del post
+    except:
+        return HttpResponseRedirect(reverse('post', args=[post.id]))

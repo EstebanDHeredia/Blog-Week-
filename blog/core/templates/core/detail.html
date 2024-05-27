@@ -32,6 +32,52 @@
         <span class="badge text-bg-info">{{ tag.name|upper }}</span>
     {% endfor %}
 
+    <br><br>
+    <div class="container">
+        <div class="row justify-content-start">
+            <div class="col-auto">
+
+                <form action="{% url 'like_post' post.id %}" method="post">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        {% if liked %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" disabled>
+                                Me gusta <span class="badge bg-secondary">{{ total_likes }}</span>
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" enabled>
+                                Me gusta <span class="badge bg-secondary">{{ total_likes }}</span>
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" disabled>
+                            Me gusta <span class="badge bg-secondary">{{ total_likes }}</span>
+                        </button>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col-auto">
+                <form action="{% url 'dislike_post' post.id %}" method="post">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        {% if disliked %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" disabled>
+                            No me gusta <span class="badge bg-secondary">{{ total_dislikes }}</span>
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" enabled>
+                            No me gusta <span class="badge bg-secondary">{{ total_dislikes }}</span>
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button type="submit" class="btn btn-primary" name="post_id" value="{{ post.id }}" disabled>
+                            No me gusta <span class="badge bg-secondary">{{ total_dislikes }}</span>
+                        </button>
+                    {% endif %}
+                </form>
+            </div>                
+        </div>
+    </div>
 </article>
 
 <hr>
